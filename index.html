@@ -98,12 +98,16 @@
 
         .video-container {
             width: 100%;
-            height: 250px;
+            height: 400px; /* Tinggi portrait */
             border-radius: 15px;
             overflow: hidden;
             margin-bottom: 20px;
             position: relative;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent; /* Hilangkan background hitam */
         }
 
         .video-placeholder {
@@ -122,9 +126,26 @@
         .local-video {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            border-radius: 15px;
+            object-fit: cover; /* Crop untuk mengisi area portrait */
+            border-radius: 20px;
             cursor: pointer;
+            background: #000;
+        }
+
+        /* Alternative: Jika ingin video memenuhi container */
+        .local-video.fill {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Crop video untuk memenuhi container */
+        }
+
+        /* Portrait video specific styling - PORTRAIT RATIO */
+        .portrait-container {
+            width: 280px; /* Lebar terbatas untuk portrait */
+            height: 400px; /* Tinggi lebih besar untuk portrait 9:16 */
+            margin: 0 auto; /* Center the container */
+            border-radius: 20px;
+            overflow: hidden;
         }
 
         .video-overlay {
@@ -133,17 +154,22 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            opacity: 0;
             transition: opacity 0.3s ease;
-            border-radius: 15px;
+            border-radius: 20px;
+            cursor: pointer;
         }
 
-        .video-container:hover .video-overlay {
-            opacity: 1;
+        .video-text {
+            color: white;
+            font-size: 1em;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
         }
 
         .play-button {
@@ -369,7 +395,12 @@
             }
             
             .video-container {
-                height: 200px;
+                height: 320px; /* Tinggi portrait di mobile */
+            }
+
+            .portrait-container {
+                width: 240px; /* Lebar portrait di mobile */
+                height: 320px; /* Tinggi portrait di mobile */
             }
             
             .features-grid {
@@ -439,30 +470,39 @@
 
         <!-- Content Section -->
         <div class="content-section">
-            <!-- Video Section -->
-            <div class="video-container" onclick="playVideo()">
-                <!-- Ganti 'your-video.mp4' dengan nama file video Anda -->
+            <!-- Video Section - Manual Play -->
+            <div class="video-container portrait-container" onclick="toggleVideo()">
+                <!-- Video lokal - Manual play -->
                 <video 
                     id="productVideo" 
                     class="local-video" 
                     muted 
                     loop 
-                    autoplay 
                     playsinline
-                    preload="metadata">
-                    <source src="landing_page_video (1).mp4" type="video/mp4">
-                    <!-- Fallback jika video tidak bisa dimuat -->
-                    <div class="video-placeholder">
-                        <div class="play-button">
-                            <div class="play-icon"></div>
-                        </div>
-                        <div class="video-text">Video tidak dapat dimuat</div>
-                    </div>
+                    preload="metadata"
+                    poster=""
+                    onloadeddata="videoLoaded()">
+                    <!-- Path sesuai struktur GitHub Anda -->
+                    <source src="landing_page_video.mp4" type="video/mp4">
                 </video>
                 
-                <div class="video-overlay">
+                <!-- Play Button Overlay - Always Visible -->
+                <div id="playButton" class="video-overlay" style="opacity: 1;">
                     <div class="play-button">
                         <div class="play-icon"></div>
+                    </div>
+                    <div class="video-text" style="color: white; margin-top: 10px; font-weight: bold;">
+                        ▶️ Klik untuk Memutar Demo
+                    </div>
+                </div>
+                
+                <!-- Video Controls -->
+                <div id="videoControls" class="video-overlay" style="opacity: 0; background: rgba(0,0,0,0.5);">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <button onclick="pauseVideo()" style="background: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer;">
+                            ⏸️
+                        </button>
+                        <span style="color: white; font-weight: bold;">Klik untuk Pause</span>
                     </div>
                 </div>
             </div>
@@ -572,12 +612,40 @@
             const video = document.getElementById('productVideo');
             
             if (video.paused) {
-                video.play();
+                video.play().catch(e => {
+                    console.log('Autoplay prevented:', e);
+                    // Jika autoplay gagal, tampilkan fallback
+                    document.getElementById('videoFallback').style.display = 'flex';
+                });
                 video.muted = false; // Unmute when user clicks
             } else {
                 video.pause();
             }
         }
+
+        function handleVideoError(video) {
+            console.log('Video error:', video.error);
+            document.getElementById('videoFallback').style.display = 'flex';
+            video.style.display = 'none';
+        }
+
+        // Force autoplay on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('productVideo');
+            
+            // Coba autoplay setelah delay singkat
+            setTimeout(() => {
+                if (video) {
+                    video.play().then(() => {
+                        console.log('Autoplay successful');
+                    }).catch(e => {
+                        console.log('Autoplay failed:', e);
+                        // Tampilkan play button jika autoplay gagal
+                        document.getElementById('videoFallback').style.display = 'flex';
+                    });
+                }
+            }, 500);
+        });
 
         function openVideo() {
             // Backup function jika dibutuhkan
@@ -604,7 +672,7 @@
             const data = Object.fromEntries(formData.entries());
             
             // Create WhatsApp message
-            const message = `🍽️ * FORM DIGITAL MENU*
+            const message = `🍽️ *PERMINTAAN FORM DIGITAL MENU*
 
 📋 *Detail Bisnis:*
 🏪 Nama Bisnis: ${data.businessName}
@@ -618,7 +686,7 @@
 Mohon bantuan untuk setup form digital pemesanan menu. Terima kasih! 🙏`;
 
             // Send to WhatsApp (ganti dengan nomor WA Anda)
-            const whatsappNumber = '6281234567890'; // GANTI DENGAN NOMOR WA ANDA
+            const whatsappNumber = '6285283212487'; // GANTI DENGAN NOMOR WA ANDA
             const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
             
             // Show success message
