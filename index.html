@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MenuKu Digital - Form Pemesanan Online</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .flyer-container {
+            width: 100%;
+            max-width: 400px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .flyer-header {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        .main-title {
+            color: white;
+            font-size: 1.8em;
+            font-weight: 900;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .event-tag {
+            background: #fff;
+            color: #ff6b35;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .content-section {
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.95);
+            position: relative;
+        }
+
+        .video-container {
+            width: 100%;
+            height: 250px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        .local-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 15px;
+        }
+
+        .video-container:hover .video-overlay {
+            opacity: 1;
+        }
+
+        .play-button {
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+            background: white;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-left: 20px solid #ff6b35;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            margin-left: 5px;
+        }
+
+        .video-text {
+            font-size: 1.1em;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 15px 10px;
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            border-radius: 15px;
+            color: white;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .feature-item:nth-child(1) { animation-delay: 0.2s; }
+        .feature-item:nth-child(2) { animation-delay: 0.4s; }
+        .feature-item:nth-child(3) { animation-delay: 0.6s; }
+        .feature-item:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .feature-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .feature-text {
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            margin: 0 -25px;
+        }
+
+        .cta-title {
+            color: white;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-button {
+            background: #fff;
+            color: #44a08d;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .date-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #fff;
+            color: #ff6b35;
+            padding: 10px 15px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .date-day {
+            font-size: 2em;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .date-month {
+            font-size: 0.8em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .promo-badge {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: #00c851;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            transform: rotate(-15deg);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .social-proof {
+            text-align: center;
+            margin: 20px 0;
+            color: #666;
+        }
+
+        .rating {
+            color: #ffc107;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+
+        .rating-text {
+            font-size: 0.9em;
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) {
+            width: 8px;
+            height: 8px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            width: 12px;
+            height: 12px;
+            top: 20%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .particle:nth-child(3) {
+            width: 6px;
+            height: 6px;
+            bottom: 30%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .flyer-container {
+                max-width: 350px;
+            }
+            
+            .main-title {
+                font-size: 1.5em;
+            }
+            
+            .video-container {
+                height: 200px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+
+        /* Modal untuk video */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            position: relative;
+            margin: 5% auto;
+            width: 90%;
+            max-width: 600px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="flyer-container">
+        <!-- Floating particles -->
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        
+        <!-- Header Section -->
+        <div class="flyer-header">
+            <div class="logo">🍽️</div>
+            <h1 class="main-title">MenuKu Digital</h1>
+            <p class="subtitle">Form Pemesanan Online</p>
+            <div class="event-tag">Revolusi Cara Pesan!</div>
+            
+            <!-- Date Badge -->
+            <div class="date-badge">
+                <div class="date-day">19</div>
+                <div class="date-month">Agt</div>
+            </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="content-section">
+            <!-- Video Section -->
+            <div class="video-container" onclick="playVideo()">
+                <!-- Ganti 'your-video.mp4' dengan nama file video Anda -->
+                <video 
+                    id="productVideo" 
+                    class="local-video" 
+                    muted 
+                    loop 
+                    autoplay 
+                    playsinline
+                    preload="metadata">
+                    <source src="landingpage/landing_page_video.mp4" type="video/mp4">
+                    <!-- Fallback jika video tidak bisa dimuat -->
+                    <div class="video-placeholder">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                        <div class="video-text">Video tidak dapat dimuat</div>
+                    </div>
+                </video>
+                
+                <div class="video-overlay">
+                    <div class="play-button">
+                        <div class="play-icon"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Proof -->
+            <div class="social-proof">
+                <div class="rating">⭐⭐⭐⭐⭐</div>
+                <div class="rating-text">500+ Restoran Menggunakan</div>
+            </div>
+
+            <!-- Features -->
+            <div class="features-grid">
+                <div class="feature-item">
+                    <span class="feature-icon">⚡</span>
+                    <div class="feature-text">Pesan Cepat</div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📱</span>
+                    <div class="feature-text">User Friendly</div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💰</span>
+                    <div class="feature-text">Hemat Biaya</div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🚀</span>
+                    <div class="feature-text">Otomatis</div>
+                </div>
+            </div>
+
+            <!-- Promo Badge -->
+            <div class="promo-badge">Gratis demo & revisi</div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2 class="cta-title">Yuk Pesan Sekarang, Promo Terbatas</h2>
+            <a href="#order-form" class="cta-button" onclick="scrollToForm()">
+                Klik disini buat Order
+            </a>
+        </div>
+    </div>
+
+    <!-- Modal untuk video -->
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeVideo()">&times;</span>
+            <iframe id="videoFrame" width="100%" height="315" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- Form Section (Hidden initially) -->
+    <div id="order-form" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; overflow-y: auto;">
+        <div style="max-width: 500px; margin: 50px auto; background: white; border-radius: 20px; padding: 30px; position: relative;">
+            <span style="position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer;" onclick="closeForm()">&times;</span>
+            
+            <h2 style="text-align: center; color: #ff6b35; margin-bottom: 25px;">🍽️ Form Pemesanan</h2>
+            
+            <form id="orderForm">
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: bold;">Nama Restoran/Bisnis *</label>
+                    <input type="text" name="businessName" required style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px;">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: bold;">Nama Pemilik *</label>
+                    <input type="text" name="ownerName" required style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px;">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: bold;">Nomor WhatsApp *</label>
+                    <input type="tel" name="whatsapp" required style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px;" placeholder="08xxxxxxxxxx">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: bold;">Jenis Bisnis *</label>
+                    <select name="businessType" required style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px;">
+                        <option value="">Pilih Jenis Bisnis</option>
+                        <option value="restoran">Restoran</option>
+                        <option value="cafe">Cafe</option>
+                        <option value="warung">Warung Makan</option>
+                        <option value="katering">Katering</option>
+                        <option value="food-truck">Food Truck</option>
+                        <option value="lainnya">Lainnya</option>
+                    </select>
+                </div>
+                
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: bold;">Alamat Bisnis *</label>
+                    <textarea name="address" required style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; height: 80px;" placeholder="Masukkan alamat lengkap"></textarea>
+                </div>
+                
+                <button type="submit" style="width: 100%; padding: 15px; background: linear-gradient(45deg, #ff6b35, #f7931e); color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; transition: all 0.3s ease;">
+                    🚀 KIRIM PERMINTAAN
+                </button>
+            </form>
+            
+            <div id="successMessage" style="display: none; text-align: center; padding: 20px; background: linear-gradient(45deg, #4ecdc4, #44a08d); color: white; border-radius: 10px; margin-top: 20px;">
+                <h3>✅ Permintaan Berhasil Dikirim!</h3>
+                <p>Tim kami akan segera menghubungi Anda melalui WhatsApp untuk setup form digital Anda.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function playVideo() {
+            const video = document.getElementById('productVideo');
+            
+            if (video.paused) {
+                video.play();
+                video.muted = false; // Unmute when user clicks
+            } else {
+                video.pause();
+            }
+        }
+
+        function openVideo() {
+            // Backup function jika dibutuhkan
+            playVideo();
+        }
+
+        function closeVideo() {
+            // Tidak dibutuhkan lagi untuk video lokal
+        }
+
+        function scrollToForm() {
+            document.getElementById('order-form').style.display = 'block';
+        }
+
+        function closeForm() {
+            document.getElementById('order-form').style.display = 'none';
+        }
+
+        // Handle form submission
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Create WhatsApp message
+            const message = `🍽️ * FORM DIGITAL MENU*
+
+📋 *Detail Bisnis:*
+🏪 Nama Bisnis: ${data.businessName}
+👤 Nama Pemilik: ${data.ownerName}
+📱 WhatsApp: ${data.whatsapp}
+🏷️ Jenis Bisnis: ${data.businessType}
+📍 Alamat: ${data.address}
+
+⏰ Waktu Permintaan: ${new Date().toLocaleString('id-ID')}
+
+Mohon bantuan untuk setup form digital pemesanan menu. Terima kasih! 🙏`;
+
+            // Send to WhatsApp (ganti dengan nomor WA Anda)
+            const whatsappNumber = '6281234567890'; // GANTI DENGAN NOMOR WA ANDA
+            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            
+            // Show success message
+            document.getElementById('successMessage').style.display = 'block';
+            this.style.display = 'none';
+            
+            // Open WhatsApp
+            setTimeout(() => {
+                window.open(whatsappURL, '_blank');
+            }, 2000);
+            
+            // Auto close after 5 seconds
+            setTimeout(() => {
+                closeForm();
+            }, 5000);
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('videoModal');
+            if (event.target == modal) {
+                closeVideo();
+            }
+        }
+
+        // Add some interactive effects
+        document.addEventListener('mousemove', function(e) {
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach((particle, index) => {
+                const speed = 0.01 + (index * 0.005);
+                const x = (e.clientX * speed) / 50;
+                const y = (e.clientY * speed) / 50;
+                particle.style.transform += ` translate(${x}px, ${y}px)`;
+            });
+        });
+
+        // Auto-animate elements on load
+        window.addEventListener('load', function() {
+            const elements = document.querySelectorAll('.feature-item');
+            elements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.transform = 'translateY(0)';
+                    el.style.opacity = '1';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>
